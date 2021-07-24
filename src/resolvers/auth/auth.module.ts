@@ -11,29 +11,23 @@ import { ConfigService } from '@nestjs/config';
 import { SecurityConfig } from 'src/configs/config.interface';
 
 @Module({
-  imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.registerAsync({
-      useFactory: async (configService: ConfigService) => {
-        const securityConfig = configService.get<SecurityConfig>('security');
-        return {
-          secret: configService.get<string>('JWT_ACCESS_SECRET'),
-          signOptions: {
-            expiresIn: securityConfig.expiresIn,
-          },
-        };
-      },
-      inject: [ConfigService],
-    }),
-    PrismaModule,
-  ],
-  providers: [
-    AuthService,
-    AuthResolver,
-    JwtStrategy,
-    GqlAuthGuard,
-    PasswordService,
-  ],
-  exports: [GqlAuthGuard],
+    imports: [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
+        JwtModule.registerAsync({
+            useFactory: async (configService: ConfigService) => {
+                const securityConfig = configService.get<SecurityConfig>('security');
+                return {
+                    secret: configService.get<string>('JWT_ACCESS_SECRET'),
+                    signOptions: {
+                        expiresIn: securityConfig?.expiresIn,
+                    },
+                };
+            },
+            inject: [ConfigService],
+        }),
+        PrismaModule,
+    ],
+    providers: [AuthService, AuthResolver, JwtStrategy, GqlAuthGuard, PasswordService],
+    exports: [GqlAuthGuard],
 })
 export class AuthModule {}
