@@ -79,7 +79,7 @@ type PostEdge {
 }
 
 input PostOrder {
-  direction: OrderDirection!
+  direction: OrderDirection = asc
   field: PostOrderField!
 }
 
